@@ -19,10 +19,10 @@ jobs:
       - checkout
       - run:
           name: Build Docker container
-          command: docker build -t ai-labs-team/infrastructure-tools:<< parameters.docker_tag >> .
+          command: docker build -t ailabsteam/infrastructure-tools:<< parameters.docker_tag >> .
       - run:
           name: Publish built Docker container
-          command: docker push ai-labs-team/infrastructure-tools:<< parameters.docker_tag >>
+          command: docker push ailabsteam/infrastructure-tools:<< parameters.docker_tag >>
 
 workflows:
   build_and_publish:
