@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build:
+  build_and_publish:
     parameters:
       docker_tag:
         type: string
@@ -17,20 +17,6 @@ jobs:
       - run:
           name: Build Docker container
           command: docker build -t ai-labs-team/infrastructure-tools:<< parameters.docker_tag >> .
-
-  publish:
-    parameters:
-      docker_tag:
-        type: string
-        default: $CIRCLE_SHA1
-
-    docker:
-      - image: docker:latest
-
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - checkout
       - run:
           name: Publish built Docker container
           command: docker push ai-labs-team/infrastructure-tools:<< parameters.docker_tag >>
@@ -39,24 +25,11 @@ workflows:
   build_and_publish:
     jobs:
       - build
-      - publish:
-          requires:
-            - build
 
   build_and_publish_tag:
     jobs:
-      - build:
+      - build_and_publish:
           docker_tag: $CIRCLE_TAG
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
-
-      - publish:
-          docker_tag: $CIRCLE_TAG
-          requires:
-            - build
           filters:
             branches:
               ignore: /.*/
