@@ -7,6 +7,10 @@ jobs:
         type: string
         default: $CIRCLE_SHA1
 
+      update_latest:
+        type: boolean
+        default: false
+
     docker:
       - image: docker:latest
 
@@ -21,9 +25,22 @@ jobs:
       - run:
           name: Build Docker container
           command: docker build -t ailabsteam/infrastructure-tools:<< parameters.docker_tag >> .
+
       - run:
           name: Publish built Docker container
           command: docker push ailabsteam/infrastructure-tools:<< parameters.docker_tag >>
+
+      - when:
+          condition: << parameters.update_latest >>
+          steps:
+            - run:
+                name: Publish build Docker container with `latest` tag
+                command: |
+                  docker tag
+                    ailabsteam/infrastructure-tools:<< parameters.docker_tag >> \
+                    ailabsteam/infrastructure-tools:latest
+
+                  docker push ailabsteam/infrastructure-tools:latest
 
 workflows:
   build_and_publish:
@@ -34,6 +51,7 @@ workflows:
     jobs:
       - build_and_publish:
           docker_tag: $CIRCLE_TAG
+          update_latest: true
           filters:
             branches:
               ignore: /.*/
