@@ -36,7 +36,7 @@ jobs:
             - run:
                 name: Publish build Docker container with `latest` tag
                 command: |
-                  docker tag
+                  docker tag \
                     ailabsteam/infrastructure-tools:<< parameters.docker_tag >> \
                     ailabsteam/infrastructure-tools:latest
 
