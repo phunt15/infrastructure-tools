@@ -26,8 +26,8 @@ RUN npm install -g cfn-create-or-update \
     && \
     npm cache clean --force
 
-# Install kubectl, AWS IAM Authenticator, Helm client and Helmfile
-COPY kubectl aws-iam-authenticator helm helmfile /bin/
+# Install kubectl, AWS IAM Authenticator, Helm client, Helmfile and Docker CLI
+COPY kubectl aws-iam-authenticator helm helmfile docker /bin/
 
 # Download, compile and install git-crypt
 RUN wget https://www.agwa.name/projects/git-crypt/downloads/git-crypt-0.6.0.tar.gz \
