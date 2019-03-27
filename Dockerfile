@@ -13,6 +13,7 @@ RUN apk -v --update add \
     build-base \
     openssl-dev \
     gettext \
+    bash \
     && \
     pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic yq && \
     apk -v --purge del py-pip && \
@@ -45,3 +46,6 @@ RUN wget https://www.agwa.name/projects/git-crypt/downloads/git-crypt-0.6.0.tar.
 # Configure Docker CLI to use the ECR Credential helper and enable experimental mode
 RUN mkdir -p ~/.docker && \
   echo '{"experimental": "enabled","credsStore": "ecr-login"}' > ~/.docker/config.json
+
+# Initialise the Helm config directory and install the `helm-diff` plugin for Helm
+RUN helm init --client-only && helm plugin install https://github.com/databus23/helm-diff --version v2.11.0+3

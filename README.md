@@ -9,6 +9,11 @@ General purpose tools:
 - Root CA certifications
 - Git
 
+Community tools for our Helmfile-centric workflow:
+- Helm
+- Helmfile
+- `helm-diff` plugin for Helm
+
 Somewhat bespoke tools for our Helmfile-centric workflow:
 
 - [cfn-create-or-update](https://www.npmjs.com/package/cfn-create-or-update)
