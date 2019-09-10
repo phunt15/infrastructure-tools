@@ -14,6 +14,7 @@ RUN apk -v --update add \
     openssl-dev \
     gettext \
     bash \
+    curl \
     && \
     pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic yq && \
     apk -v --purge del py-pip && \
