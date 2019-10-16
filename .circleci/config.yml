@@ -15,8 +15,7 @@ jobs:
       - image: docker:latest
 
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - checkout
       - run:
           name: Authenticate with Dockerhub
