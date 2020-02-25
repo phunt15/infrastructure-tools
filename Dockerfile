@@ -19,8 +19,7 @@ RUN apk -v --update add \
     bash \
     curl \
     && \
-    pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic yq && \
-    pip install -r python-requirements.txt && \
+    pip install --upgrade -r python-requirements.txt && \
     pip freeze && \
     apk -v --purge del py-pip && \
     rm /var/cache/apk/*
