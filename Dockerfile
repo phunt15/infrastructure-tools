@@ -1,5 +1,8 @@
 FROM node:alpine
 
+# Copy Python requirements.txt file onto the image.
+COPY python-requirements.txt .
+
 # Install AWS CLI, jq and CA certificates
 RUN apk -v --update add \
     python \
@@ -16,7 +19,8 @@ RUN apk -v --update add \
     bash \
     curl \
     && \
-    pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic yq && \
+    pip install --upgrade -r python-requirements.txt && \
+    pip freeze && \
     apk -v --purge del py-pip && \
     rm /var/cache/apk/*
 
