@@ -5,7 +5,7 @@ COPY python-requirements.txt .
 
 # Install AWS CLI, jq and CA certificates
 RUN apk -v --update add \
-    python \
+    python2 \
     py-pip \
     groff \
     less \
