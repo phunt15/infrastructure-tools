@@ -1,0 +1,33 @@
+kind: pipeline
+type: kubernetes
+name: infra-tools-test
+
+steps:
+- name: publish test image
+  image: plugins/docker
+  when:
+    branch:
+      - ph-test-drone-pipeline
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: autkast/infrastructure-tools
+    tags:
+    - sha-${DRONE_COMMIT_SHA}
+
+- name: publish image
+  image: plugins/docker
+  when:
+    branch:
+      - master
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: autkast/infrastructure-tools
+    tags:
+    - sha-${DRONE_COMMIT_SHA}
+    - latest
