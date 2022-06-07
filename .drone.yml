@@ -39,9 +39,9 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:${DRONE_TAG}
+  # - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:${DRONE_TAG}
   - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:latest
-  - docker image push autkast/infrastructure-tools:${DRONE_TAG}
+  # - docker image push autkast/infrastructure-tools:${DRONE_TAG}
   - docker image push autkast/infrastructure-tools:latest
 
 services:
