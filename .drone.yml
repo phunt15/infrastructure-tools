@@ -16,3 +16,15 @@ steps:
     repo: autkast/infrastructure-tools
     tags:
     - sha-${DRONE_COMMIT_SHA}
+
+- name: test image
+  image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+  when:
+    event:
+    - push
+  commands:
+  - kubectl version --client
+  - helm version --client
+  - helm diff --help
+  - aws --version
+  
