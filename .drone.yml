@@ -1,9 +1,9 @@
 kind: pipeline
 type: kubernetes
 name: infra-tools-test
-environment:
-  DOCKER_USERNAME: $$docker_username
-  DOCKER_PASSWORD: $$docker_password
+# environment:
+#   DOCKER_USERNAME: $$docker_username
+#   DOCKER_PASSWORD: $$docker_password
 
 steps:
 - name: build, test, and push commit image tag
