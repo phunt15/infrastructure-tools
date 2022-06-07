@@ -3,35 +3,59 @@ type: kubernetes
 name: infra-tools-test
 
 steps:
-- name: publish test image
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: docker_username
-    password:
+- name: build, test, and push commit image tag
+  image: docker:dind
+  environment:
+    PASSWORD:
       from_secret: docker_password
-    repo: autkast/infrastructure-tools
-    tags:
-    - sha-${DRONE_COMMIT_SHA}
-
-- name: test image
-  image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+    USERNAME:
+      from_secret: docker_username
+  volumes:
+  - name: dockersock
+    path: /var/run
   commands:
-  - kubectl version --client
-  - helm version --client
-  - aws --version
+  - sleep 10s
+  - docker login -u $${USERNAME} -p $${PASSWORD}
+  - docker build -t "$${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
+  - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
+  - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
+  - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
+  - docker push $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
 
-- name: push tagged image
-  image: plugins/docker
+# - name: test image
+#   image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+#   commands:
+#   - kubectl version --client
+#   - helm version --client
+#   - aws --version
+
+- name: publish as tagged and latest
+  image: docker:dind
+  environment:
+    PASSWORD:
+      from_secret: docker_password
+    USERNAME:
+      from_secret: docker_username
   when:
     event:
-    - tag
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: autkast/infrastructure-tools
-    tags:
-    - ${DRONE_TAG}
-    - latest
+      - tag
+  volumes:
+  - name: dockersock
+    path: /var/run
+  commands:
+  # - docker tag $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} $${USERNAME}/infrastructure-tools:${DRONE_TAG}
+  - docker tag $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} $${USERNAME}/infrastructure-tools:latest
+  # - docker image push $${USERNAME}/infrastructure-tools:${DRONE_TAG}
+  - docker image push $${USERNAME}/infrastructure-tools:latest
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
+volumes:
+- name: dockersock
+  temp: {}
