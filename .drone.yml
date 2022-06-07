@@ -9,7 +9,7 @@ steps:
     event:
     - push
   environment:
-    - DOCKER_HOST: unix://drone/docker.sock
+    - DOCKER_HOST: 'unix://drone/docker.sock'
   commands:
     - sleep 10
     - docker build -t autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} .
@@ -24,7 +24,7 @@ steps:
     event:
     - tag
   environment:
-    - DOCKER_HOST=unix://drone/docker.sock
+    - DOCKER_HOST: 'unix://drone/docker.sock'
     - DOCKER_USERNAME:
       from_secret: docker_username
     - DOCKER_PASSWORD:
@@ -33,3 +33,9 @@ steps:
     - docker build --rm -t autkast/infrastructure-tools:sha-${DRONE_TAG} .
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - docker push autkast/infrastructure-tools:sha-${DRONE_TAG}
+
+services:
+  docker:
+    image: docker:dind
+    privileged: true
+    command: [ '-H', 'unix:///drone/docker.sock' ]
