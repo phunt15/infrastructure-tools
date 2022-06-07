@@ -27,9 +27,9 @@ steps:
     event:
       - tag
   environment:
-    - DOCKER_USERNAME:
+    DOCKER_USERNAME:
         from_Secret: docker_username
-    - DOCKER_PASSWORD:
+    DOCKER_PASSWORD:
         from_secret: docker_password
   volumes:
   - name: dockersock
