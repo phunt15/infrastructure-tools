@@ -16,11 +16,11 @@ steps:
   commands:
   - sleep 10s
   - docker login -u $${USERNAME} -p $${PASSWORD}
-  - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
-  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
-  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
-  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
-  - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+  - docker build -t "$${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
+  - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
+  - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
+  - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
+  - docker push $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
 
 # - name: test image
 #   image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
@@ -43,10 +43,10 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  # - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:${DRONE_TAG}
-  - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:latest
-  # - docker image push autkast/infrastructure-tools:${DRONE_TAG}
-  - docker image push autkast/infrastructure-tools:latest
+  - docker tag $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:${DRONE_TAG}
+  - docker tag $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:latest
+  - docker image push $${USERNAME}/infrastructure-tools:${DRONE_TAG}
+  - docker image push $${USERNAME}/infrastructure-tools:latest
 
 services:
 - name: docker
