@@ -37,7 +37,7 @@ steps:
   commands:
   - sleep 10
   - docker ps -a
-  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
   - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:${DRONE_TAG} && docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:latest
   - docker image push autkast/infrastructure-tools:${DRONE_TAG} && docker image push autkast/infrastructure-tools:latest
 
