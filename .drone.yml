@@ -16,4 +16,3 @@ steps:
     repo: autkast/infrastructure-tools
     tags:
     - sha-${DRONE_COMMIT_SHA}
-    
