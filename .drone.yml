@@ -3,35 +3,33 @@ type: kubernetes
 name: infra-tools-test
 
 steps:
-- name: publish test image
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: autkast/infrastructure-tools
-    tags:
-    - sha-${DRONE_COMMIT_SHA}
-
-- name: test image
-  image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+- name: build & test
+  image: docker
+  when:
+    event:
+    - push
+  environment:
+  - DOCKER_HOST=unix://drone/docker.sock
   commands:
-  - kubectl version --client
-  - helm version --client
-  - aws --version
+  - sleep 10
+  - docker build -t autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} .
+  - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
+  - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
+  - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
+  - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
 
-- name: push tagged image
-  image: plugins/docker
+- name: publish
+  image: docker
   when:
     event:
     - tag
-  settings:
-    username:
+  environment:
+  - DOCKER_HOST=unix://drone/docker.sock
+  - DOCKER_USERNAME:
       from_secret: docker_username
-    password:
+  - DOCKER_PASSWORD:
       from_secret: docker_password
-    repo: autkast/infrastructure-tools
-    tags:
-    - ${DRONE_TAG}
-    - latest
+  commands:
+  - docker build --rm -t autkast/infrastructure-tools:sha-${DRONE_TAG} .
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push autkast/infrastructure-tools:sha-${DRONE_TAG}
