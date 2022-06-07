@@ -1,0 +1,50 @@
+kind: pipeline
+type: kubernetes
+name: infra-tools-test
+
+steps:
+- name: publish test image
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: autkast/infrastructure-tools
+    tags:
+    - sha-${DRONE_COMMIT_SHA}
+
+- name: test image
+  image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+  commands:
+  - kubectl version --client
+  - helm version --client
+  - aws --version
+
+- name: push tagged image
+  image: plugins/docker
+  when:
+    event:
+    - tag
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: autkast/infrastructure-tools
+    tags:
+    - ${DRONE_TAG}
+
+- name: push latest tag
+  image: plugins/docker
+  when:
+    event:
+    - tag
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: autkast/infrastructure-tools
+    tags:
+    - latest

@@ -1,3 +1,4 @@
+[![Build Status](https://9e6a-2601-142-8200-25e0-f4a7-84ce-8c36-1d92.ngrok.io/api/badges/PHunt14/infrastructure-tools/status.svg)](https://9e6a-2601-142-8200-25e0-f4a7-84ce-8c36-1d92.ngrok.io/PHunt14/infrastructure-tools)
 # infrastructure-tools
 Common tools that our infrastructure management scripts like to use, lovingly packaged in a Docker container for your convenience.
 
