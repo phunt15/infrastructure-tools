@@ -9,14 +9,14 @@ steps:
     event:
     - push
   environment:
-  - DOCKER_HOST=unix://drone/docker.sock
+    - DOCKER_HOST=unix://drone/docker.sock
   commands:
-  - sleep 10
-  - docker build -t autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} .
-  - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
-  - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
-  - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
-  - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+    - sleep 10
+    - docker build -t autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} .
+    - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
+    - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
+    - docker run --rm autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
+    - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
 
 - name: publish
   image: docker
@@ -24,12 +24,12 @@ steps:
     event:
     - tag
   environment:
-  - DOCKER_HOST=unix://drone/docker.sock
-  - DOCKER_USERNAME:
+    - DOCKER_HOST=unix://drone/docker.sock
+    - DOCKER_USERNAME:
       from_secret: docker_username
-  - DOCKER_PASSWORD:
+    - DOCKER_PASSWORD:
       from_secret: docker_password
   commands:
-  - docker build --rm -t autkast/infrastructure-tools:sha-${DRONE_TAG} .
-  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - docker push autkast/infrastructure-tools:sha-${DRONE_TAG}
+    - docker build --rm -t autkast/infrastructure-tools:sha-${DRONE_TAG} .
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - docker push autkast/infrastructure-tools:sha-${DRONE_TAG}
