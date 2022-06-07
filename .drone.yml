@@ -2,8 +2,7 @@ kind: pipeline
 type: kubernetes
 name: infra-tools-test
 environment:
-  DOCKER_USERNAME:
-    from_secret: docker_username
+  DOCKER_USERNAME: $$docker_username
   DOCKER_PASSWORD: $$docker_password
 
 steps:
@@ -13,7 +12,7 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  - echo $DOCKER_USERNAME
+  - echo $docker_username
   # - sleep 10s
   # - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
   # - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
