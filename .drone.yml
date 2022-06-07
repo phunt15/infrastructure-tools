@@ -21,17 +21,23 @@ steps:
   - helm version --client
   - aws --version
 
-- name: push tagged image
-  image: plugins/docker
-  when:
-    event:
-    - tag
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: autkast/infrastructure-tools
-    tags:
-    - ${DRONE_TAG}
-    - latest
+- name: push as tagged and latest
+  image: docker:dind
+  volumes:
+  - name: dockersock
+    path: /var/run
+  commands:
+  - sleep 10
+  - docker ps -a
+
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
+volumes:
+- name: dockersock
+  temp: {}
