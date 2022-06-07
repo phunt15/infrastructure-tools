@@ -1,18 +1,20 @@
 kind: pipeline
 type: kubernetes
 name: infra-tools-test
-# environment:
-#   DOCKER_USERNAME: $$docker_username
-#   DOCKER_PASSWORD: $$docker_password
 
 steps:
 - name: build, test, and push commit image tag
   image: docker:dind
+  environment:
+    PASSWORD:
+      from_secret: docker_password
+    USERNAME:
+      from_secret: docker_username
   volumes:
   - name: dockersock
     path: /var/run
   commands:
-  - echo ${DOCKER_USERNAME}
+  - echo $${USERNAME}
   secrets: [ docker_username ]
   # - sleep 10s
   # - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
