@@ -6,25 +6,7 @@ environment:
   DOCKER_PASSWORD: $$docker_password
 
 steps:
-- name: publish test image
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: autkast/infrastructure-tools
-    tags:
-    - sha-${DRONE_COMMIT_SHA}
-
-- name: test image
-  image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
-  commands:
-  - kubectl version --client
-  - helm version --client
-  - aws --version
-
-- name: push as tagged and latest
+- name: build, test, and push commit image tag
   image: docker:dind
   when:
     event:
@@ -33,8 +15,30 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  - sleep 10
-  # - echo $DOCKER_USERNAME
+  - sleep 10s
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
+  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
+  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
+  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
+  - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+
+# - name: test image
+#   image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+#   commands:
+#   - kubectl version --client
+#   - helm version --client
+#   - aws --version
+
+- name: publish as tagged and latest
+  image: docker:dind
+  when:
+    event:
+      - tag
+  volumes:
+  - name: dockersock
+    path: /var/run
+  commands:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   - docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:${DRONE_TAG} && docker tag autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} autkast/infrastructure-tools:latest
   - docker image push autkast/infrastructure-tools:${DRONE_TAG} && docker image push autkast/infrastructure-tools:latest
