@@ -25,6 +25,5 @@ steps:
   commands:
   - kubectl version --client
   - helm version --client
-  - helm diff --help
+  # - helm diff --help
   - aws --version
-  
