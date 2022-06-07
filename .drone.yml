@@ -12,7 +12,7 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  - echo $${DOCKER_USERNAME}
+  - echo ${DOCKER_USERNAME}
   secrets: [ docker_username ]
   # - sleep 10s
   # - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
