@@ -8,9 +8,6 @@ environment:
 steps:
 - name: build, test, and push commit image tag
   image: docker:dind
-  when:
-    event:
-      - tag
   volumes:
   - name: dockersock
     path: /var/run
