@@ -9,7 +9,7 @@ steps:
     event:
     - push
   environment:
-    - DOCKER_HOST=unix://drone/docker.sock
+    - DOCKER_HOST: unix://drone/docker.sock
   commands:
     - sleep 10
     - docker build -t autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} .
