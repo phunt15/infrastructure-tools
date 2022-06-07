@@ -12,13 +12,14 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  - sleep 10s
-  - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
-  - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
-  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
-  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
-  - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
-  - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
+  - echo DOCKER_USERNAME
+  # - sleep 10s
+  # - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
+  # - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
+  # - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
+  # - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
+  # - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
+  # - docker push autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
 
 # - name: test image
 #   image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
