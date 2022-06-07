@@ -12,7 +12,8 @@ steps:
   - name: dockersock
     path: /var/run
   commands:
-  - echo ${docker_username}
+  - echo $DOCKER_USERNAME
+  secrets: [ docker_username ]
   # - sleep 10s
   # - docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
   # - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
