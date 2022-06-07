@@ -13,7 +13,7 @@ steps:
     path: /var/run
   commands:
   - sleep 10s
-  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
   - docker build -t "autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}" .
   - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "kubectl version --client"
   - docker run autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "helm version --client"
