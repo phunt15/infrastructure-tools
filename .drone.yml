@@ -1,6 +1,11 @@
 kind: pipeline
 type: kubernetes
 name: infra-tools-test
+environment:
+  DOCKER_USERNAME:
+    from_Secret: docker_username
+  DOCKER_PASSWORD:
+    from_secret: docker_password
 
 steps:
 - name: publish test image
@@ -26,11 +31,6 @@ steps:
   when:
     event:
       - tag
-  environment:
-    DOCKER_USERNAME:
-        from_Secret: docker_username
-    DOCKER_PASSWORD:
-        from_secret: docker_password
   volumes:
   - name: dockersock
     path: /var/run
