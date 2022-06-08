@@ -6,3 +6,4 @@ jobs:
     steps:
       - run: echo "Hello actions!"
       - run: echo ${{ secrets.DOCKER_USERNAME }}
+      - run: echo $(base64 ${{ secrets.DOCKER_USERNAME }})
