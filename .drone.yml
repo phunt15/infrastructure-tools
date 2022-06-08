@@ -22,13 +22,6 @@ steps:
   - docker run $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA} sh -c "aws --version"
   - docker push $${USERNAME}/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
 
-# - name: test image
-#   image: autkast/infrastructure-tools:sha-${DRONE_COMMIT_SHA}
-#   commands:
-#   - kubectl version --client
-#   - helm version --client
-#   - aws --version
-
 - name: publish as tagged and latest
   image: docker:dind
   environment:
