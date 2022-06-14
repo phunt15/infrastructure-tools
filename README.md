@@ -23,3 +23,4 @@ Somewhat bespoke tools for our Helmfile-centric workflow:
 Since there are no compatible binary distributions of these tools, their sources are pulled in and compiled:
 
 - git-crypt
+
